@@ -11,26 +11,37 @@ const stringify = require('json-stringify-safe');
 
 const { getAllEntryNodes } = require('./contentful-client');
 
+exports.onCreateNode = ({ node }) => {
+	console.log(node.internal.type)
+}
+
 exports.sourceNodes = async ({ actions: { createNode } }) => {
 	const nodes = await getAllEntryNodes();
-	nodes.forEach(n => createNode(n));
+	nodes.forEach((n,i) => {
+		try {
+			createNode(n);
+
+		} catch (e) {
+			console.log(`Couldn't create node ${i} because ${e}.`, n);
+		}
+	});
 }
 
 exports.createPages = ({ graphql, actions }) => {
 	const { createPage } = actions;
 	return graphql(`{
-		allContentfulEntry(filter: {contentType: {eq: "scenario"}}) {
+		allScenario {
 			edges {
 				node {
+					path
 					scenarioID
-					title
 				}
 			}
 		}
 	}`).then(result => {
-		result.data.allContentfulEntry.edges.forEach(({ node }) => {
+		result.data.allScenario.edges.forEach(({ node }) => {
 			createPage({
-				path: slugify(node.title.toLowerCase()),
+				path: node.path,
 				component: path.resolve(`./src/templates/scenario.js`),
 				context: {
 					// Data passed to context is available

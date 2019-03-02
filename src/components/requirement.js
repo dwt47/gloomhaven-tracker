@@ -23,26 +23,26 @@ const AchievementRequirementQuery = id => graphql`
 	}
 `;
 
-const AchievementRequirement = ({ id }) => (
-	<StaticQuery
-		query={AchievementRequirementQuery(id)}
-		render={props => {
-			const { title, complete } = props.contentfulEntry;
-			return <span>{title}</span>;
-		}}
-	/>
-);
+// const AchievementRequirement = ({ id }) => (
+// 	<StaticQuery
+// 		query={AchievementRequirementQuery(id)}
+// 		render={props => {
+// 			const { title, complete } = props.contentfulEntry;
+// 			return <span>{title}</span>;
+// 		}}
+// 	/>
+// );
 
 const REQUIREMENT_MAP = {
 	'achievementRequirement': AchievementRequirement,
 };
-
-export default ({ id }) => (
-	<StaticQuery
-		query={RequirementQuery(id)}
-		render={props => {
-			const Component = REQUIREMENT_MAP[props.contentfulEntry.contentType];
-			return <Component id={id} />
-		}}
-	/>
-);
+export default () => {};
+// export default ({ id }) => (
+// 	<StaticQuery
+// 		query={RequirementQuery(id)}
+// 		render={props => {
+// 			const Component = REQUIREMENT_MAP[props.contentfulEntry.contentType];
+// 			return <Component id={id} />
+// 		}}
+// 	/>
+// );
