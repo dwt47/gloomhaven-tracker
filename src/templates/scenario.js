@@ -1,11 +1,11 @@
 import React from "react"
-import { graphql, Link } from "gatsby"
+import { graphql } from "gatsby"
 
 import Layout from "../components/layout"
-// import Requirement from "../components/requirement";
+import ScenarioLink from '../components/scenarioLink';
 
 const Scenario = ({ data }) => {
-  const { scenario } = data;
+  const { scenario = {} } = data;
 
   const {
     scenarioID = '',
@@ -24,7 +24,7 @@ const Scenario = ({ data }) => {
           <ul>
             {links.map((link, i) => (
               <li key={i}>
-                <Link to={link.path}>{link.title}</Link>
+                <ScenarioLink scenario={link} />
               </li>
             ))}
           </ul>
@@ -58,27 +58,33 @@ export const query = graphql`
         path
       }
       requirements {
-        id
-        title
-        complete
-        achievement {
+        __typename
+        ... on AchievementRequirement {
           id
           title
-          contentType
+          complete
+          achievement {
+            title
+            achievementType
+          }
         }
       }
       rewards {
-        title
-        contentType
-        id
-        amount
-        type
-        collectiveOrEach
-        scenarioID
-        slug
+        __typename
+        ... on Scenario {
+          title
+          id
+          scenarioID
+          slug
+        }
+        ... on Reward {
+          amount
+          type
+          collectiveOrEach
+        }
       }
       losses {
-        contentType
+        __typename
         title
         id
       }

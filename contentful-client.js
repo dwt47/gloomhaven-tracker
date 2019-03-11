@@ -43,7 +43,7 @@ function processEntry(entry) {
 		delete fields.id;
 	}
 
-	const type = contentType[0].toUpperCase() + contentType.slice(1);
+	let type = contentType[0].toUpperCase() + contentType.slice(1);
 
 	const stringified = stringify(entry);
 	const contentDigest = crypto
@@ -53,14 +53,22 @@ function processEntry(entry) {
 
 	let processedFields = flattenItem(fields);
 	switch(contentType) {
+		case 'globalAchievement':
+			processedFields.achievementType = 'global';
+			type = 'Achievement';
+			break;
+		case 'partyAchievement':
+			processedFields.achievementType = 'party';
+			type = 'Achievement';
+			break;
 		case 'scenario':
 			processedFields.slug = slugify(processedFields.title.toLowerCase());
-			processedFields.path = `scenario/${processedFields.slug}`;
+			processedFields.path = `/scenario/${processedFields.slug}`;
+			processedFields.title = processedFields.title.replace(/^\d+ /, '');
 			break;
 	}
 
 	return {
-		contentType,
 		...processedFields,
 		id: contentfulID,
 		parent: null,
@@ -78,45 +86,32 @@ function resolveLinksBetweenEntries(entries) {
 		entriesByID[entry.id] = entry;
 	});
 
-	function getLinkedEntry(obj) {
-		return obj && obj.sys && obj.sys.id && entriesByID[obj.sys.id] || false;
+	function getLinkedEntryID(obj) {
+		return (
+			obj && obj.sys && obj.sys.id && entriesByID[obj.sys.id]
+		) ? obj.sys.id : false;
 	}
 
-	function tryToResolveLinkedEntry(parent, key) {
-		const entry = parent[key];
-		const linkedEntry = getLinkedEntry(entry);
-
-		if (!linkedEntry) return;
-
-		// don't actually link the full scenario since there are circular references
-		if (linkedEntry.contentType === 'scenario') {
-			const {
-				id,
-				contentType,
-				scenarioID,
-				title,
-				slug,
-				path,
-			} = linkedEntry;
-			parent[key] = { id, contentType, scenarioID, title, slug, path };
-		} else {
-			parent[key] = linkedEntry;
-		}
-	}
-
-	// Replace any reference to another entry with the entry object itself
-	// Looping through each top-level field of each entry, as well as any array that is a top-level value
+	// Create links between linked entries
+	// see https://www.gatsbyjs.org/docs/creating-a-source-plugin/#creating-the-relationship
 	entries.forEach(entry => {
 		Object.keys(entry).forEach(key => {
-			tryToResolveLinkedEntry(entry, key);
+			const value = entry[key];
 
-			const val = entry[key];
-			if (Array.isArray(val)) {
-				val.forEach((obj, index) => {
-					tryToResolveLinkedEntry(val, index);
-				});
+			if (Array.isArray(value)) {
+				const linkedIDs = value.map(getLinkedEntryID);
+
+				if (linkedIDs.every(id => !!id)) {
+					delete entry[key];
+					entry[`${key}___NODE`] = linkedIDs;
+				}
+			} else {
+				const id = getLinkedEntryID(value);
+				if (id) {
+					delete entry[key]
+					entry[`${key}___NODE`] = id;
+				}
 			}
-
 		})
 	});
 }

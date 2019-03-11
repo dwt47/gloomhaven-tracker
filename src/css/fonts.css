@@ -1,0 +1,34 @@
+@font-face {
+  font-family: 'Pirata One';
+  src: url('../fonts/PirataOne.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: PirataOne;
+  src: url('../fonts/PirataOne.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'High Tower';
+  src: url('../fonts/HighTower.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: HighTower;
+  src: url('../fonts/HighTower.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Nyala;
+  src: url('../fonts/Nyala.ttf') format('ttf');
+  font-weight: normal;
+  font-style: normal;
+}

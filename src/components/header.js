@@ -1,42 +1,67 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
+import { Link, StaticQuery, graphql } from "gatsby"
 import React from "react"
+import Img from 'gatsby-image'
 
-const Header = ({ siteTitle }) => (
+const GloomhavenLogo = (props) => (
+  <StaticQuery
+    query={graphql`
+      query {
+        placeholderImage: file(relativePath: { eq: "gloomhaven-logo.png" }) {
+          childImageSharp {
+            fluid(maxWidth: 300) {
+              ...GatsbyImageSharpFluid_noBase64
+            }
+          }
+        }
+      }
+    `}
+    render={data => (
+      <Img
+        fluid={data.placeholderImage.childImageSharp.fluid}
+        {...props}
+      />
+    )}
+  />
+);
+
+const Header = () => (
   <header
     style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
+      background: `#9972338a`,
     }}
   >
     <div
       style={{
         margin: `0 auto`,
         maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
+        padding: `.8rem .5rem`,
       }}
     >
       <h1 style={{ margin: 0 }}>
         <Link
           to="/"
           style={{
-            color: `white`,
+            color: `#4c2812`,
             textDecoration: `none`,
+            display: `flex`,
+            alignItems: `center`,
           }}
         >
-          {siteTitle}
+          <GloomhavenLogo
+            fadeIn={false}
+            style={{
+              maxWidth: `240px`,
+              minWidth: `100px`,
+              width: `50%`,
+              marginRight: `10px`,
+            }}
+            alt="Gloomhaven"
+          />
+          <span>Tracker</span>
         </Link>
       </h1>
     </div>
   </header>
 )
-
-Header.propTypes = {
-  siteTitle: PropTypes.string,
-}
-
-Header.defaultProps = {
-  siteTitle: ``,
-}
 
 export default Header

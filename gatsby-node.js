@@ -13,14 +13,17 @@ const { getAllEntryNodes } = require('./contentful-client');
 
 exports.onCreateNode = ({ node }) => {
 	console.log(node.internal.type)
+	if (node.internal.type === 'Scenario' && node.requirements) {
+		console.log(node.requirements);
+	}
 }
 
 exports.sourceNodes = async ({ actions: { createNode } }) => {
 	const nodes = await getAllEntryNodes();
+
 	nodes.forEach((n,i) => {
 		try {
 			createNode(n);
-
 		} catch (e) {
 			console.log(`Couldn't create node ${i} because ${e}.`, n);
 		}
