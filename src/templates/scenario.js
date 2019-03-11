@@ -1,7 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
 
-import Layout from "../components/layout"
 import ScenarioLink from '../components/scenarioLink';
 
 const Scenario = ({ data }) => {
@@ -15,7 +14,7 @@ const Scenario = ({ data }) => {
   } = scenario;
 
   return (
-    <Layout>
+    <>
       <h2><small>{scenarioID}</small> {title}</h2>
       <p>{goal}</p>
       {links && (
@@ -30,7 +29,7 @@ const Scenario = ({ data }) => {
           </ul>
         </React.Fragment>
       )}
-    </Layout>
+    </>
   );
 };
 

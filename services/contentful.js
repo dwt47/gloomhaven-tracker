@@ -145,4 +145,4 @@ async function getAllEntryNodes() {
 module.exports = {
 	client,
 	getAllEntryNodes,
-};
+}

@@ -4,16 +4,16 @@
  *
  * See: https://www.gatsbyjs.org/docs/static-query/
  */
-
 import React from "react"
 import PropTypes from "prop-types"
 
-import Header from "./header"
+import { FirebaseProvider } from '../../services/firebase';
+import Header from "../components/header"
 import "../css/fonts.css"
 import "../css/layout.css"
 
 const Layout = ({ children }) => (
-  <React.Fragment>
+  <FirebaseProvider>
     <Header />
     <main style={{
         margin: `0 auto`,
@@ -32,7 +32,7 @@ const Layout = ({ children }) => (
       {` `}
       <a href="https://www.gatsbyjs.org">Gatsby</a>
     </footer>
-  </React.Fragment>
+  </FirebaseProvider>
 );
 
 Layout.propTypes = {

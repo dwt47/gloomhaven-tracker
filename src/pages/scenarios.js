@@ -2,14 +2,13 @@ import React from "react"
 import { graphql } from "gatsby"
 import get from 'lodash.get';
 
-import Layout from "../components/layout"
 import ScenarioLink from '../components/scenarioLink';
 
 const ScenarioLanding = props => {
   const edges = get(props, 'data.allScenario.edges', []);
 
   return (
-    <Layout>
+    <>
       <h2>Scenarios</h2>
       <ul>
         {edges.map(({ node }, i) => (
@@ -18,7 +17,7 @@ const ScenarioLanding = props => {
           </li>
         ))}
       </ul>
-    </Layout>
+    </>
   );
 };
 

@@ -1,6 +1,7 @@
 import { Link, StaticQuery, graphql } from "gatsby"
 import React from "react"
 import Img from 'gatsby-image'
+import AuthButton from './authButton';
 
 const GloomhavenLogo = (props) => (
   <StaticQuery
@@ -32,12 +33,13 @@ const Header = () => (
   >
     <div
       style={{
+        display: `flex`,
         margin: `0 auto`,
         maxWidth: 960,
         padding: `.8rem .5rem`,
       }}
     >
-      <h1 style={{ margin: 0 }}>
+      <h1 style={{ margin: 0, flex: `1 0 auto` }}>
         <Link
           to="/"
           style={{
@@ -60,6 +62,7 @@ const Header = () => (
           <span>Tracker</span>
         </Link>
       </h1>
+      <AuthButton />
     </div>
   </header>
 )

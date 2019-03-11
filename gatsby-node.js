@@ -9,7 +9,7 @@ const { createFilePath } = require('gatsby-source-filesystem');
 const slugify = require('slugify');
 const stringify = require('json-stringify-safe');
 
-const { getAllEntryNodes } = require('./src/services/contentful');
+const { getAllEntryNodes } = require('./services/contentful');
 
 exports.onCreateNode = ({ node }) => {
 	console.log(node.internal.type)
