@@ -52,6 +52,14 @@ function processEntry(entry) {
 		.digest(`hex`);
 
 	let processedFields = flattenItem(fields);
+
+	if (processedFields.title) {
+		processedFields.slug = slugify(processedFields.title.toLowerCase());
+		processedFields.path = `/${contentType}/${processedFields.slug}`;
+	} else {
+		console.error(`No title field on item: `, fields);
+	}
+
 	switch(contentType) {
 		case 'globalAchievement':
 			processedFields.achievementType = 'global';
@@ -62,8 +70,6 @@ function processEntry(entry) {
 			type = 'Achievement';
 			break;
 		case 'scenario':
-			processedFields.slug = slugify(processedFields.title.toLowerCase());
-			processedFields.path = `/scenario/${processedFields.slug}`;
 			processedFields.title = processedFields.title.replace(/^\d+ /, '');
 			break;
 	}

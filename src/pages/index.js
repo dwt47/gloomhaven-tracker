@@ -19,7 +19,7 @@ const IndexPage = () => {
       <div style={{ maxWidth: `300px`, marginBottom: `1.45rem` }}>
         <AstronautImage />
       </div>
-      <Link to="/scenarios">See All Scenarios</Link>
+      <Link to="/scenario">See All Scenarios</Link>
     </>
   );
 }

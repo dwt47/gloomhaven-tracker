@@ -32,26 +32,31 @@ exports.sourceNodes = async ({ actions: { createNode } }) => {
 
 exports.createPages = ({ graphql, actions }) => {
 	const { createPage } = actions;
-	return graphql(`{
-		allScenario {
-			edges {
-				node {
-					path
-					scenarioID
+	function makePages(type) {
+		const uc = type[0].toUpperCase() + type.slice(1);
+		const allName = `all${uc}`;
+		return graphql(`{
+			${allName} {
+				edges {
+					node {
+						id
+						path
+					}
 				}
 			}
-		}
-	}`).then(result => {
-		result.data.allScenario.edges.forEach(({ node }) => {
-			createPage({
-				path: node.path,
-				component: path.resolve(`./src/templates/scenario.js`),
-				context: {
-					// Data passed to context is available
-					// in page queries as GraphQL variables.
-					scenarioID: node.scenarioID,
-				},
+		}`).then(result => {
+			result.data[allName].edges.forEach(({ node }) => {
+				createPage({
+					path: node.path,
+					component: path.resolve(`./src/templates/${type}.js`),
+					context: { id: node.id },
+				});
 			});
-		})
-	});
+		});
+	}
+
+	return Promise.all([
+		`scenario`,
+		`enemy`,
+	].map(makePages));
 }
